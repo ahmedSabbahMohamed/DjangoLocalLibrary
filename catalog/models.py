@@ -32,7 +32,7 @@ class Book(models.Model):
     summary = models.TextField(max_length=1000, help_text="Enter a brief description of the book")
     isbn = models.CharField('ISBN', max_length=13, unique=True, help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn''">ISBN number</a>')
     genre = models.ManyToManyField(Genre, help_text="Select a genre for this book")
-    lang = models.CharField(default="English", max_length=50)
+    language = models.ManyToManyField('Language', help_text="language")
 
     def __str__(self) -> str:
         """String for representing the Model object."""
@@ -85,3 +85,14 @@ class Author(models.Model):
     
     def __str__(self) -> str:
         return f'{self.last_name}, {self.first_name}'
+
+class Language(models.Model):
+    """Model representing a language (e.g. English, French, Japanese, etc.)"""
+    name = models.CharField(max_length=30)
+
+    def __str__(self) -> str:
+        return self.name
+    
+    def get_absolute_url(self):
+        """Returns the url to access a particular language."""
+        return reverse('language-detail', args=[str(self.id)])
